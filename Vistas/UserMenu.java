@@ -183,7 +183,7 @@ public class UserMenu extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDepartamentos = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnListarEmpleados = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -332,7 +332,12 @@ public class UserMenu extends javax.swing.JFrame {
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
 
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\ezgif.com-gif-maker.gif")); // NOI18N
+        btnListarEmpleados.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\ezgif.com-gif-maker.gif")); // NOI18N
+        btnListarEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarEmpleadosActionPerformed(evt);
+            }
+        });
 
         jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\assets\\showUser (1).png")); // NOI18N
 
@@ -353,7 +358,7 @@ public class UserMenu extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnListarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -372,7 +377,7 @@ public class UserMenu extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(btnListarEmpleados))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -624,6 +629,33 @@ public class UserMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumero3ActionPerformed
 
+    private void btnListarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarEmpleadosActionPerformed
+      int row = tblDepartamentos.getSelectedRow();
+        System.out.println(row);
+        String sucursal = tblDepartamentos.getValueAt(row, 0).toString();
+        String querysucursal = "SELECT  idsucursal FROM sucursal WHERE nombreSucursal = '"+ sucursal +"';";
+        try{
+            connection = conexion.getConnection();
+            st = connection.createStatement();
+            rs = st.executeQuery(querysucursal);
+            while(rs.next()){
+            int idSucursal = rs.getInt("idSucursal");    
+            EmpleadoForm empleadoForm = new EmpleadoForm(this, true);
+            empleadoForm.setVisible(true);
+            empleadoForm.recibeIdsucursal(idSucursal);
+            }
+        }catch(SQLException e){
+            System.out.println(e);
+            
+        }
+        
+        System.out.println(querysucursal);
+        
+        
+       
+        
+    }//GEN-LAST:event_btnListarEmpleadosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -666,11 +698,11 @@ public class UserMenu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnListarEmpleados;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cbCalle;
     private javax.swing.JComboBox<String> cbDepartamento;
     private javax.swing.JComboBox<String> cbZona;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

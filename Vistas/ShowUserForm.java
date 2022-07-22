@@ -269,7 +269,7 @@ public class ShowUserForm extends javax.swing.JDialog {
     }//GEN-LAST:event_txtIdActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-     
+     ActualizarEmpleado();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
