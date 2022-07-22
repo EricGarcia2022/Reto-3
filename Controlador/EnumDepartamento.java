@@ -2,9 +2,8 @@
 package Controlador;
 
 
-public class EnumDepartamento {
+public enum EnumDepartamento {
 
-public enum EnumMunicipios{
     Amazonas,
     Antioquia,
     Arauca,
@@ -41,4 +40,3 @@ public enum EnumMunicipios{
       
 }
     
-}

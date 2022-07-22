@@ -22,26 +22,44 @@ public class UserMenu extends javax.swing.JFrame {
     Statement st;
     ResultSet rs;
     //3. Creamos una instancia de la interfaz de la tabla empleados
-    DefaultTableModel contenidoTabla, contenidoTablaDepartamento;
-    ComboBoxModel enumDepartamento, enumZona, enumTipoCalles;
+    DefaultTableModel contenidoTabla, contenidoTablaDepartamento, contenidoTablaEmpleados;
+    ComboBoxModel enumDepartamento, enumZona, enumTipoCalle;
 
     public UserMenu() {
         enumDepartamento = new DefaultComboBoxModel(EnumDepartamento.values());
         enumZona = new DefaultComboBoxModel(EnumTipoZona.values());
-        enumTipoCalles = new DefaultComboBoxModel(EnumTipoCalle.values());
+        enumTipoCalle = new DefaultComboBoxModel(EnumTipoCalle.values());
         initComponents();
         setLocationRelativeTo(null);
         listarEmpleados();
         listarDepartamentos();
     }
 
-    UserMenu(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void listarDepartamentos() {
+
+        String query = "SELECT nombreSucursal,nombreDepartamento FROM direccion INNER JOIN sucursal  ON idDireccion = FK_idDireccion;";
+        System.out.println("Entro al metodo listarDepartamentos");
+        try {
+            connection = conexion.getConnection();
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            Object[] departamentos = new Object[2];
+            contenidoTablaDepartamento = (DefaultTableModel) tblDepartamentos.getModel();
+            while (rs.next()) {
+                departamentos[0] = rs.getString("nombreSucursal");
+                departamentos[1] = rs.getString("nombreDepartamento");
+                System.out.println("Sucursal: " + departamentos[0] + ", departamento: " + departamentos[1]);
+                contenidoTablaDepartamento.addRow(departamentos);
+                tblDepartamentos.setModel(contenidoTablaDepartamento);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
     }
 
-    UserMenu(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 
     // 4. Metodo que trae todos los empleados existentes en la base de datos
     public void listarEmpleados() {
@@ -56,7 +74,7 @@ public class UserMenu extends javax.swing.JFrame {
                 //6. Crear un objeto donde se almacene el resultado de la consulta
                 Object[] empleados = new Object[6];
                 //7. Actualizar la propiedad Model de la tabla 
-                contenidoTablaEmpleado = (DefaultTableModel) tblEmpleados.getModel();
+                contenidoTablaEmpleados = (DefaultTableModel) tblEmpleados.getModel();
                 //8. Recorremos el resultado de la consulta del query
                 while (rs.next()) {
                     empleados[0] = rs.getInt("idEmp");
@@ -65,11 +83,11 @@ public class UserMenu extends javax.swing.JFrame {
                     empleados[3] = rs.getString("tipoDocumento");
                     empleados[4] = rs.getString("documento");
                     empleados[5] = rs.getString("correo");
-                    System.out.println("id: " + empleados[0] + ", nombre: " 
-                                              + empleados[1] + " , apellidos: " 
-                                              + empleados[2] + ", documento: "
-                                              + empleados[3] + " " + empleados[4] 
-                                              + ", correo: " + empleados[5]);
+                    System.out.println("id: " + empleados[0] + ", nombre: "
+                            + empleados[1] + " , apellidos: "
+                            + empleados[2] + ", documento: "
+                            + empleados[3] + " " + empleados[4]
+                            + ", correo: " + empleados[5]);
                     //9.Creamos una fila   dentro de la tabla para cada elemento que devuelve
                     //el query
                     contenidoTablaEmpleados.addRow(empleados);
@@ -83,7 +101,7 @@ public class UserMenu extends javax.swing.JFrame {
             }
 
         } else {
-            String queryEncontrar = "SELECT * FROM empleados WHERE nombreEmp LIKE '% " + nombre + "%' OR apellidos LIKE '%" + nombre + "%';";
+            String queryEncontrar = "SELECT * FROM empleado WHERE nombreEmp LIKE '% " + nombre + "%' OR apellidos LIKE '%" + nombre + "%';";
             try {
                 connection = conexion.getConnection();
                 st = connection.createStatement();
@@ -132,6 +150,14 @@ public class UserMenu extends javax.swing.JFrame {
 
     }
 
+    public void borrarDatosTablaDepartamentos() {
+        for (int i = 0; i < tblDepartamentos.getRowCount(); i++) {
+            contenidoTablaDepartamento.removeRow(i);
+            i = i - 1;
+
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -154,11 +180,12 @@ public class UserMenu extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         txtNumero3 = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
-        btnListar = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblDepartamentos = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -187,12 +214,14 @@ public class UserMenu extends javax.swing.JFrame {
 
         jTabbedPane8.setBackground(new java.awt.Color(186, 254, 254));
 
-        jPanel2.setBackground(new java.awt.Color(193, 254, 254));
+        jPanel2.setBackground(new java.awt.Color(154, 244, 244));
+
+        jPanel4.setBackground(new java.awt.Color(172, 255, 255));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText("Departamento");
 
-        cbDepartamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbDepartamento.setModel(enumDepartamento);
         cbDepartamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbDepartamentoActionPerformed(evt);
@@ -202,12 +231,12 @@ public class UserMenu extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Tipo Calle");
 
-        cbCalle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCalle.setModel(enumTipoCalle);
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Zona");
 
-        cbZona.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbZona.setModel(enumZona);
         cbZona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbZonaActionPerformed(evt);
@@ -225,53 +254,46 @@ public class UserMenu extends javax.swing.JFrame {
         });
 
         btnGuardar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\assets\\confirmIcon.png")); // NOI18N
-        btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
 
-        btnListar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\assets\\showUser (1).png")); // NOI18N
-        btnListar.setText("Ver Sucursales");
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(cbCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(13, 13, 13)
-                                .addComponent(jLabel2))
+                                .addComponent(txtNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtNumero2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNumero3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(cbDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbZona, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(txtNumero2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNumero3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbZona, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGuardar)
-                        .addGap(40, 40, 40)
-                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(180, 180, 180)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -292,35 +314,27 @@ public class UserMenu extends javax.swing.JFrame {
                     .addComponent(txtNumero2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
                     .addComponent(txtNumero3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnListar))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(btnGuardar)
+                .addGap(19, 19, 19))
         );
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 180, Short.MAX_VALUE)
-        );
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblDepartamentos.setBackground(new java.awt.Color(167, 254, 254));
+        tblDepartamentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Departamento", "Zona"
+                "Sucursal", "Departamento"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(tblDepartamentos);
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
+
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\ezgif.com-gif-maker.gif")); // NOI18N
+
+        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\assets\\showUser (1).png")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -329,28 +343,37 @@ public class UserMenu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addGap(59, 59, 59)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel10)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jTabbedPane8.addTab("Sucursales", jPanel2);
@@ -403,6 +426,14 @@ public class UserMenu extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tblEmpleados);
+        if (tblEmpleados.getColumnModel().getColumnCount() > 0) {
+            tblEmpleados.getColumnModel().getColumn(0).setHeaderValue("ID");
+            tblEmpleados.getColumnModel().getColumn(1).setHeaderValue("Nombre");
+            tblEmpleados.getColumnModel().getColumn(2).setHeaderValue("Apellido(s)");
+            tblEmpleados.getColumnModel().getColumn(3).setHeaderValue("Tipo de Documento");
+            tblEmpleados.getColumnModel().getColumn(4).setHeaderValue("Documento");
+            tblEmpleados.getColumnModel().getColumn(5).setHeaderValue("Correo");
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -437,7 +468,7 @@ public class UserMenu extends javax.swing.JFrame {
                 .addComponent(btnAddUser)
                 .addGap(39, 39, 39))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(0, 133, Short.MAX_VALUE)
+                .addGap(0, 179, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(153, 153, 153)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -469,13 +500,16 @@ public class UserMenu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane8)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane8)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -534,8 +568,8 @@ public class UserMenu extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String departamentoOption = cbDepartamento.getSelectedItem().toString();
-        String zonaOption = cbZona.getSelectedItem().toString;
-        String tipoCalleOption = cbTipoCalle.getSelectedItem().toString();
+        String zonaOption = cbZona.getSelectedItem().toString();
+        String tipoCalleOption = cbCalle.getSelectedItem().toString();
         String numero1 = txtNumero1.getText();
         String numero2 = txtNumero2.getText();
         String numero3 = txtNumero3.getText();
@@ -544,27 +578,42 @@ public class UserMenu extends javax.swing.JFrame {
                 + "`numero2`, `numero3`, `nombreDepartamento`) VALUES ('" + zonaOption
                 + "','" + tipoCalleOption + "','" + numero1 + "','" + numero2 + "','" + numero3
                 + "','" + departamentoOption + "');";
+        System.out.println(queryDireccion);
         try {
             connection = conexion.getConnection();
             st = connection.createStatement();
             st.executeUpdate(queryDireccion);
-            System.out.println(queryDireccion);
-            JOptionPane.showMessageDialog(this, "La nueva direccion ha sido creada existosamente");
+           String queryIdDireccion = "SELECT idDireccion FROM `direccion` WHERE nombreDepartamento = '" 
+                    + departamentoOption + "'AND zona ='" + zonaOption  + "'AND tipoCalle ='" 
+                    + tipoCalleOption + "'AND numero1 ='" + numero1 + "'AND numero2 ='" + numero2 + "'AND numero3 ='"+ numero3 +"' ;";
+           
+            try{
+                rs = st.executeQuery(queryIdDireccion);
+                SucursalForm sucursalForm = new SucursalForm(this,true);
+                sucursalForm.setVisible(true);
+                while(rs.next()){
+                    int idDireccion = rs.getInt("idDireccion");
+                     sucursalForm.recibeIdDireccion(idDireccion);
+                     System.out.println("Envia" + idDireccion);
+                }
+               
+                borrarDatosTablaDepartamentos();
+                listarDepartamentos();
+            }catch (SQLException e ){
+                System.out.println(e);
+                
+            }
+            
+            
+            
+            JOptionPane.showMessageDialog(this, "La Sucursal ha sido creada con exito.");   
 
         } catch (SQLException e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(this, "No se pudo añadir el departamento", "", JOptionPane.ERROR_MESSAGE);
 
         }
-    
 
-    public void listarDepartamentos() {
-        String 
-    }
-
-    void setVisible(boolean rootPaneCheckingEnabled) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void cbZonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbZonaActionPerformed
@@ -589,45 +638,40 @@ public class UserMenu extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(UserMenu.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex) {
+        } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(UserMenu.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(UserMenu.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(UserMenu.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new UserMenu().setVisible(true);
-        }
+      
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnListar;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox<String> cbCalle;
     private javax.swing.JComboBox<String> cbDepartamento;
     private javax.swing.JComboBox<String> cbZona;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -641,14 +685,14 @@ public class UserMenu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTabbedPane jTabbedPane8;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblDepartamentos;
     private javax.swing.JTable tblEmpleados;
     private javax.swing.JTextField txtBuscarEmp;
     private javax.swing.JTextField txtNumero1;
