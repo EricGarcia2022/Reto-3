@@ -130,7 +130,9 @@ public class UserMenu extends javax.swing.JFrame {
                 System.out.println("Error para buscar empleado ");
                 System.out.println(e);
 
+                //<editor-fold defaultstate="collapsed" desc="comment">
             }
+//</editor-fold>
         }
 
     }
@@ -156,7 +158,13 @@ public class UserMenu extends javax.swing.JFrame {
             i = i - 1;
 
         }
-    }
+        cbDepartamento.setSelectedIndex(0);
+        cbTipoCalle.setSelectedIndex(0);
+        txtNumero1.setText("");
+        txtNumero2.setText("");
+        txtNumero3.setText("");
+        
+        }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -171,7 +179,7 @@ public class UserMenu extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         cbDepartamento = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        cbCalle = new javax.swing.JComboBox<>();
+        cbTipoCalle = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         cbZona = new javax.swing.JComboBox<>();
         txtNumero1 = new javax.swing.JTextField();
@@ -184,7 +192,7 @@ public class UserMenu extends javax.swing.JFrame {
         tblDepartamentos = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         btnListarEmpleados = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtSearchDepartamento = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -231,7 +239,7 @@ public class UserMenu extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Tipo Calle");
 
-        cbCalle.setModel(enumTipoCalle);
+        cbTipoCalle.setModel(enumTipoCalle);
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Zona");
@@ -274,7 +282,7 @@ public class UserMenu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(cbCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbTipoCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -308,7 +316,7 @@ public class UserMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbCalle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbTipoCalle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(txtNumero2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -332,7 +340,7 @@ public class UserMenu extends javax.swing.JFrame {
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
 
-        btnListarEmpleados.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\ezgif.com-gif-maker.gif")); // NOI18N
+        btnListarEmpleados.setIcon(new javax.swing.ImageIcon("C:\\Users\\Usuario\\Documents\\NetBeansProjects\\Reto3_g53EricGarcia\\src\\assets\\newUser.png")); // NOI18N
         btnListarEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListarEmpleadosActionPerformed(evt);
@@ -353,13 +361,13 @@ public class UserMenu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSearchDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnListarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(btnListarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 135, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,13 +379,15 @@ public class UserMenu extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel10)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSearchDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnListarEmpleados))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(btnListarEmpleados)))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -473,7 +483,7 @@ public class UserMenu extends javax.swing.JFrame {
                 .addComponent(btnAddUser)
                 .addGap(39, 39, 39))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(0, 179, Short.MAX_VALUE)
+                .addGap(0, 209, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(153, 153, 153)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -574,7 +584,7 @@ public class UserMenu extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String departamentoOption = cbDepartamento.getSelectedItem().toString();
         String zonaOption = cbZona.getSelectedItem().toString();
-        String tipoCalleOption = cbCalle.getSelectedItem().toString();
+        String tipoCalleOption = cbTipoCalle.getSelectedItem().toString();
         String numero1 = txtNumero1.getText();
         String numero2 = txtNumero2.getText();
         String numero3 = txtNumero3.getText();
@@ -633,6 +643,7 @@ public class UserMenu extends javax.swing.JFrame {
       int row = tblDepartamentos.getSelectedRow();
         System.out.println(row);
         String sucursal = tblDepartamentos.getValueAt(row, 0).toString();
+        String departamento = tblDepartamentos.getValueAt(row, 1).toString();
         String querysucursal = "SELECT  idsucursal FROM sucursal WHERE nombreSucursal = '"+ sucursal +"';";
         try{
             connection = conexion.getConnection();
@@ -700,8 +711,8 @@ public class UserMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnListarEmpleados;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JComboBox<String> cbCalle;
     private javax.swing.JComboBox<String> cbDepartamento;
+    private javax.swing.JComboBox<String> cbTipoCalle;
     private javax.swing.JComboBox<String> cbZona;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -723,12 +734,12 @@ public class UserMenu extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTabbedPane jTabbedPane8;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblDepartamentos;
     private javax.swing.JTable tblEmpleados;
     private javax.swing.JTextField txtBuscarEmp;
     private javax.swing.JTextField txtNumero1;
     private javax.swing.JTextField txtNumero2;
     private javax.swing.JTextField txtNumero3;
+    private javax.swing.JTextField txtSearchDepartamento;
     // End of variables declaration//GEN-END:variables
 }
